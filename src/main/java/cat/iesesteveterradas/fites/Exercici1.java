@@ -8,7 +8,8 @@ import java.util.Scanner;
 
 /**
  * Implementa codi que compleixi el següent:
- * * - Llegeix un fitxer de text d'entrada amb codificació UTF-8.
+ * 
+ * - Llegeix un fitxer de text d'entrada amb codificació UTF-8.
  * - Inverteix el text de cada línia utilitzant el mètode 'giraText'.
  * - Escriu les línies invertides en un fitxer de sortida amb codificació UTF-8.
  * - El fitxer de sortida es crea o sobrescriu si ja existeix.
@@ -31,22 +32,14 @@ public class Exercici1 {
 
     // Processa el fitxer d'entrada i genera el fitxer de sortida.
     public void executa() {
-        // *************** CODI EXERCICI FITA **********************/
-        File fitxerEntrada = new File(this.filePathIn);
-        File fitxerSortida = new File(this.filePathOut);
-
-        try (Scanner scanner = new Scanner(fitxerEntrada, StandardCharsets.UTF_8);
-             FileWriter writer = new FileWriter(fitxerSortida, StandardCharsets.UTF_8)) {
-
-            while (scanner.hasNextLine()) {
-                String linia = scanner.nextLine();
-                String liniaGirada = giraText(linia);
-                writer.write(liniaGirada);
-                // Afegeix un salt de línia a menys que sigui l'última línia del fitxer d'entrada
-                // per evitar una línia buida extra al final.
-                if (scanner.hasNextLine()) {
-                    writer.write(System.lineSeparator());
-                }
+        // try-with-resources: tanca el Scanner i el FileWriter encara que hi hagi un error.
+        // FileWriter sense "append" crea el fitxer o el sobreescriu si ja existeix.
+        try (Scanner lector = new Scanner(new File(filePathIn), StandardCharsets.UTF_8);
+             FileWriter escriptor = new FileWriter(filePathOut, StandardCharsets.UTF_8)) {
+            while (lector.hasNextLine()) {
+                String linia = lector.nextLine();
+                escriptor.write(giraText(linia));
+                escriptor.write("\n");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -55,12 +48,11 @@ public class Exercici1 {
 
     // Mètode per invertir el text d'una línia
     public static String giraText(String text) {
-        // *************** CODI EXERCICI FITA **********************/
         return new StringBuilder(text).reverse().toString();
     }
 
     /****************************************************************************/
-    /* NO CAL MODIFICAR                                */
+    /*                          NO CAL MODIFICAR                                */
     /****************************************************************************/
     // Mètode per configurar el fitxer d'entrada
     public void configuraRutaFitxerEntrada(String filePathIn) {

@@ -3,6 +3,7 @@ package cat.iesesteveterradas.fites;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +37,8 @@ import jakarta.json.stream.JsonGenerator;
 
 /**
  * Implementa el codi que realitzi el següent:
- * * - Genera documents XML i JSON a partir de la informació sobre llenguatges de programació continguda en una llista.
+ * 
+ * - Genera documents XML i JSON a partir de la informació sobre llenguatges de programació continguda en una llista.
  * - Guarda l'estructura XML i JSON generada en fitxers a les rutes especificades amb els noms 'Exercici3.xml' i 'Exercici3.json'.
  * - Per crear el fitxer JSON cal usar Jakarta.
  * - Gestió d'errors: si hi ha algun problema en escriure o generar els fitxers, mostra l'excepció a la consola.
@@ -136,49 +138,46 @@ public class Exercici3 {
 
     // Mètode que crea el document XML a partir de la llista proporcionada
     private Document crearDocumentXML(ArrayList<String[]> llista) {
-        // *************** CODI EXERCICI FITA **********************/
         try {
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.newDocument();
 
-            // Element arrel
-            Element rootElement = doc.createElement("llista");
-            doc.appendChild(rootElement);
+            Element arrel = doc.createElement("llista");
+            doc.appendChild(arrel);
 
-            for (String[] llenguatgeInfo : llista) {
-                // Element llenguatge
+            // Cada element de la llista és {nom, any, extensió, dificultat}
+            for (String[] dades : llista) {
                 Element llenguatge = doc.createElement("llenguatge");
-                rootElement.appendChild(llenguatge);
+                llenguatge.setAttribute("dificultat", dades[3]);
+                llenguatge.setAttribute("extensio", dades[2]);
 
-                // Atributs
-                llenguatge.setAttribute("extensio", llenguatgeInfo[2]);
-                llenguatge.setAttribute("dificultat", llenguatgeInfo[3]);
-
-                // Element nom
                 Element nom = doc.createElement("nom");
-                nom.appendChild(doc.createTextNode(llenguatgeInfo[0]));
+                nom.appendChild(doc.createTextNode(dades[0]));
                 llenguatge.appendChild(nom);
 
-                // Element any
                 Element any = doc.createElement("any");
-                any.appendChild(doc.createTextNode(llenguatgeInfo[1]));
+                any.appendChild(doc.createTextNode(dades[1]));
                 llenguatge.appendChild(any);
+
+                arrel.appendChild(llenguatge);
             }
             return doc;
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
+            return null;
         }
-        return null; 
     }
 
     // Escriu un Document en un fitxer XML
     public static void guardarXML(String path, Document doc) {
-        // *************** CODI EXERCICI FITA **********************/
         try {
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
+
             DOMSource source = new DOMSource(doc);
             StreamResult result = new StreamResult(new File(path));
             transformer.transform(source, result);
@@ -189,23 +188,23 @@ public class Exercici3 {
 
     // Escriu la llista en un fitxer JSON utilitzant Jakarta
     public void guardarJSON(String path, ArrayList<String[]> llista) {
-        // *************** CODI EXERCICI FITA **********************/
+        // 1. Construir l'array JSON amb un objecte per llenguatge
         JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
-
-        for (String[] llenguatgeInfo : llista) {
-            JsonObjectBuilder objectBuilder = Json.createObjectBuilder();
-            objectBuilder.add("nom", llenguatgeInfo[0]);
-            objectBuilder.add("any", llenguatgeInfo[1]);
-            objectBuilder.add("extensio", llenguatgeInfo[2]);
-            objectBuilder.add("dificultat", llenguatgeInfo[3]);
-            arrayBuilder.add(objectBuilder);
+        for (String[] dades : llista) {
+            JsonObjectBuilder llenguatge = Json.createObjectBuilder()
+                    .add("nom", dades[0])
+                    .add("any", dades[1])
+                    .add("extensio", dades[2])
+                    .add("dificultat", dades[3]);
+            arrayBuilder.add(llenguatge);
         }
 
-        Map<String, Object> properties = new HashMap<>(1);
-        properties.put(JsonGenerator.PRETTY_PRINTING, true);
-        JsonWriterFactory writerFactory = Json.createWriterFactory(properties);
-        
-        try (FileWriter fileWriter = new FileWriter(path);
+        // 2. Escriure'l al fitxer, amb format llegible (pretty printing)
+        Map<String, Object> config = new HashMap<>();
+        config.put(JsonGenerator.PRETTY_PRINTING, true);
+        JsonWriterFactory writerFactory = Json.createWriterFactory(config);
+
+        try (FileWriter fileWriter = new FileWriter(path, StandardCharsets.UTF_8);
              JsonWriter jsonWriter = writerFactory.createWriter(fileWriter)) {
             jsonWriter.writeArray(arrayBuilder.build());
         } catch (IOException e) {
@@ -214,7 +213,7 @@ public class Exercici3 {
     }
 
     /****************************************************************************/
-    /* NO CAL TOCAR */
+    /*                              NO CAL TOCAR                                */
     /****************************************************************************/
     // Retorna els nodes d'una expressió XPath
     public static NodeList getNodeList(Document doc, String expression) {

@@ -1,48 +1,27 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>cat.iesesteveterradas</groupId>
-    <artifactId>AMS2-MP06</artifactId>
+    <artifactId>AMS2-MP0486-RA1-Fites</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>AMS2-MP06</name>
-    <url>http://maven.apache.org</url>
+    <name>AMS2-MP0486-RA1-Fites</name>
 
     <properties>
-    <maven.compiler.source>17</maven.compiler.source>
-    <maven.compiler.target>17</maven.compiler.target>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.release>21</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-    <repositories>
-      <repository>
-          <id>oss.sonatype.org-snapshot</id>
-          <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-      </repository>
-    </repositories>
-
     <dependencies>
-        <dependency>
-            <groupId>javax.json</groupId>
-            <artifactId>javax.json-api</artifactId>
-            <version>1.1.4</version>
-        </dependency>
-
-        <dependency>
-          <groupId>org.glassfish</groupId>
-          <artifactId>javax.json</artifactId>
-          <version>1.1.4</version>
-        </dependency>
-
+        <!-- Jakarta JSON Processing: API i implementació (Exercici 3) -->
         <!-- https://mvnrepository.com/artifact/jakarta.json/jakarta.json-api -->
         <dependency>
             <groupId>jakarta.json</groupId>
             <artifactId>jakarta.json-api</artifactId>
             <version>2.1.3</version>
         </dependency>
-        
         <!-- https://mvnrepository.com/artifact/org.eclipse.parsson/parsson -->
         <dependency>
             <groupId>org.eclipse.parsson</groupId>
@@ -50,51 +29,20 @@
             <version>1.1.7</version>
         </dependency>
 
-        <!-- Jackson Core -->
-        <dependency>
-          <groupId>com.fasterxml.jackson.core</groupId>
-          <artifactId>jackson-core</artifactId>
-          <version>2.15.3</version>
-        </dependency>
-
-        <!-- Jackson Databind -->
-        <dependency>
-          <groupId>com.fasterxml.jackson.core</groupId>
-          <artifactId>jackson-databind</artifactId>
-          <version>2.15.3</version>
-        </dependency>
-
-        <!-- Jackson Annotations -->
-        <dependency>
-          <groupId>com.fasterxml.jackson.core</groupId>
-          <artifactId>jackson-annotations</artifactId>
-          <version>2.15.3</version>
-        </dependency>
-
+        <!-- org.json: només el fan servir els tests per validar el JSON generat -->
         <!-- https://mvnrepository.com/artifact/org.json/json -->
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20240303</version>
+            <scope>test</scope>
         </dependency>
 
-        <!-- JavaFX Dependencies -->
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-controls</artifactId>
-            <version>17.0.0.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-fxml</artifactId>
-            <version>17.0.0.1</version>
-        </dependency>
-
+        <!-- JUnit -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>5.10.0</version> <!-- Use the latest stable version available -->
+            <version>6.1.3</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -103,13 +51,17 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.16.0</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.2</version>
+                <version>3.6.0</version>
                 <configuration>
                     <argLine>-Dfile.encoding=UTF-8</argLine>
                 </configuration>
             </plugin>
-            <!-- other plugins -->
         </plugins>
     </build>
 
@@ -121,7 +73,7 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>exec-maven-plugin</artifactId>
-                        <version>1.6.0</version>
+                        <version>3.6.3</version>
                         <configuration>
                             <!-- Parameterized mainClass -->
                             <mainClass>${exec.mainClass}</mainClass>

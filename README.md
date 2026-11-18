@@ -1,93 +1,71 @@
-# MP06-UF1 Fites #
+# MP0486 RA1 Fites (curs 25-26): resolta #
+
+[![Tests](https://github.com/jpala4-ieti/DAM-M0486-RA1-Fites-Resolta-25-26/actions/workflows/maven.yml/badge.svg)](https://github.com/jpala4-ieti/DAM-M0486-RA1-Fites-Resolta-25-26/actions/workflows/maven.yml)
+
+Solució de referència de la fita del RA1 (gestió de fitxers). Els mètodes marcats amb
+`CODI EXERCICI FITA` a `Exercici0`, `Exercici1`, `Exercici2` i `Exercici3` ja estan implementats.
+Les condicions de lliurament són a [INSTRUCCIONS.md](INSTRUCCIONS.md).
+
+## Comprovació automàtica ##
+
+La comprovació de GitHub Actions compila el projecte i passa tots els tests a cada push.
+
+## Requisits ##
+
+Java 21 i Maven.
 
 ## Arrencada ràpida ##
-Execució ràpida dels diferents exemples i resolusions de problemes
 
-## Windows ##
+### Windows ###
 ```bash
 .\run.ps1 cat.iesesteveterradas.fites.FitesMain
-```
-
-```bash
 .\run.ps1 cat.iesesteveterradas.fites.Exercici0
 .\run.ps1 cat.iesesteveterradas.fites.Exercici1
-.\run.ps1 cat.iesesteveterradas.fites.Exercici2Escriu
-.\run.ps1 cat.iesesteveterradas.fites.Exercici2Llegeix
+.\run.ps1 cat.iesesteveterradas.fites.Exercici2
 .\run.ps1 cat.iesesteveterradas.fites.Exercici3
-.\run.ps1 cat.iesesteveterradas.fites.Exercici4
 ```
 
-## Linux ##
+### Linux / macOS ###
 ```bash
-run.sh  cat.iesesteveterradas.fites.FitesMain
+./run.sh cat.iesesteveterradas.fites.FitesMain
+./run.sh cat.iesesteveterradas.fites.Exercici0
+./run.sh cat.iesesteveterradas.fites.Exercici1
+./run.sh cat.iesesteveterradas.fites.Exercici2
+./run.sh cat.iesesteveterradas.fites.Exercici3
 ```
 
+`FitesMain` mostra un menú per triar l'exercici. Els scripts compilen, passen els tests i
+executen la classe indicada.
+
+## Execució pas a pas ##
+
 ```bash
-run.sh  cat.iesesteveterradas.fites.Exercici0
-run.sh  cat.iesesteveterradas.fites.Exercici1
-run.sh  cat.iesesteveterradas.fites.Exercici2Escriu
-run.sh  cat.iesesteveterradas.fites.Exercici2Llegeix
-run.sh  cat.iesesteveterradas.fites.Exercici3
-run.sh  cat.iesesteveterradas.fites.Exercici4
+mvn clean compile
+mvn exec:java -PrunMain "-Dexec.mainClass=cat.iesesteveterradas.fites.Exercici0"
 ```
 
-## Compilació i funcionament ##
+## Tests ##
 
-### Execució senzilla ###
-
-#### Windows ####
 ```bash
-.\run.ps1 <com.project.Main> <param1> <param2> <param3>
-run.sh <com.project.Main> <param1> <param2> <param3>
-```
-#### Linux ####
-```bash
-.\run.ps1 <com.project.Main> <param1> <param2> <param3>
-run.sh <com.project.Main> <param1> <param2> <param3>
-```
-
-On:
-* <com.project.Main>: és la classe principal que vols executar.
-* \<param1>, \<param2>, \<param3>: són els paràmetres que necessites passar a la teva aplicació.
-
-
-### Execució pas a pas ###
-
-Si prefereixes executar el projecte pas a pas, pots seguir les següents instruccions:
-
-Neteja el projecte per eliminar fitxers anteriors:
-```bash
-mvn clean
-```
-
-Compila el projecte:
-```bash
-mvn compile test
-```
-
-Executa la classe principal:
-```bash
-mvn exec:java -q -Dexec.mainClass="<com.project.Main>" <param1> <param2> <param3>
-```
-
-On:
-* <com.project.Main>: és la classe principal que vols executar.
-* \<param1>, \<param2>, \<param3>: són els paràmetres que necessites passar a la teva aplicació.
-
-### Execució de tests ###
-Per executar, un cop generat l'artefacte .jar
-```bash
-# Executar TOTS els tests
+# Tots els tests
 mvn test
-# Executar un test individual especificant package o només nom del test
-mvn test "-Dtest=com.project.pr13.PR130MainTest"
-mvn test -Dtest=PR130MainTest
-# Executar múltiples tests específics (separats per comes)
-mvn test -Dtest="PR130MainTest,PR131MainTest,PR132MainTest"
-# Tots els tests que comencin amb "Lectura"
-mvn test -Dtest="Lectura*"
-# Tots els tests que continguin "Arxiu"
-mvn test -Dtest="*Arxiu*"
-# Tests específics de List i Scanner
-mvn test -Dtest="*List*,*Scanner*"
+# Els tests d'un exercici
+mvn test -Dtest=Exercici0Test
+# Un sol test
+mvn test -Dtest="Exercici1Test#testGiraText"
+# Diversos exercicis
+mvn test -Dtest="Exercici2Test,Exercici3Test"
 ```
+
+Hi ha cinc tests per a l'exercici 0, dos per a l'1 i un per al 2 i per al 3. Al repositori
+base fallen tots fins que s'implementen els mètodes; en aquesta solució han de passar tots.
+
+## Versions ##
+
+| Component | Versió |
+|---|---|
+| Java | 21 |
+| Jakarta JSON Processing (API) | 2.1.3 |
+| Eclipse Parsson | 1.1.7 |
+| org.json (només tests) | 20240303 |
+| JUnit Jupiter | 6.1.3 |

@@ -7,7 +7,8 @@ import cat.iesesteveterradas.fites.objectes.Exercici2nau;
 
 /**
  * Implementa el codi que realitzi el següent:
- * * - Serialitza aquesta llista en un fitxer binari anomenat 'Exercici2.dat' al directori de treball especificat.
+ * 
+ * - Serialitza aquesta llista en un fitxer binari anomenat 'Exercici2.dat' al directori de treball especificat.
  * - Després d'una pausa d'1 segon, deserialitza la llista del fitxer binari i la imprimeix per pantalla amb el format "Nom, País Any".
  * - Gestió d'errors: si hi ha algun problema en escriure o llegir el fitxer (ex. fitxer no trobat), mostra l'excepció a la consola amb e.printStackTrace()
  */
@@ -49,9 +50,8 @@ public class Exercici2 {
 
     // Mètode per serialitzar la llista a un fitxer
     public void serialitzaLlista(String filePath, ArrayList<Exercici2nau> llista) {
-        // *************** CODI EXERCICI FITA **********************/
-        try (FileOutputStream fos = new FileOutputStream(filePath);
-             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filePath))) {
+            // ArrayList és serialitzable i Exercici2nau també: es desa tota la llista d'un cop
             oos.writeObject(llista);
         } catch (IOException e) {
             e.printStackTrace();
@@ -59,32 +59,31 @@ public class Exercici2 {
     }
 
     // Mètode per deserialitzar la llista del fitxer
-    @SuppressWarnings("unchecked")
     public ArrayList<Exercici2nau> deserialitzaLlista(String filePath) {
-        // *************** CODI EXERCICI FITA **********************/
-        ArrayList<Exercici2nau> llista = null;
-        try (FileInputStream fis = new FileInputStream(filePath);
-             ObjectInputStream ois = new ObjectInputStream(fis)) {
-            llista = (ArrayList<Exercici2nau>) ois.readObject();
+        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filePath))) {
+            @SuppressWarnings("unchecked")
+            ArrayList<Exercici2nau> llista = (ArrayList<Exercici2nau>) ois.readObject();
+            return llista;
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
+            return null;
         }
-        return llista;
     }
 
     // Mètode per imprimir la llista
     public void imprimeixLlista(ArrayList<Exercici2nau> llista) {
-        // *************** CODI EXERCICI FITA **********************/
-        if (llista != null) {
-            for (Exercici2nau nau : llista) {
-                System.out.println(nau.toString());
-            }
+        if (llista == null) {
+            return;
+        }
+        for (Exercici2nau nau : llista) {
+            // toString() de Exercici2nau ja retorna "Nom, País Any"
+            System.out.println(nau);
         }
     }
 
     /****************************************************************************/
-    /* NO CAL MODIFICAR                                */
-    /****************************************************************************/      
+    /*                          NO CAL MODIFICAR                                */
+    /****************************************************************************/       
     // Setter per definir el path
     public void configurarRutaFitxerSortida(String filePath) {
         this.filePath = filePath;

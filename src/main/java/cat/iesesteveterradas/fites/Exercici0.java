@@ -8,9 +8,11 @@ import java.util.ArrayList;
 
 /**
  * Objectius:
- * Implementa els mètodes: comprovaExistenciaFitxer, determinaSiEsOcult, obtenirDataUltimaModificacio, verificarEsPotModificar, llistarArxiusDirectori 
- * * La funcionalitat que s'espera que realitzin és:
- * * - Comprovar si `filePath` existeix.
+ *   Implementa els mètodes: comprovaExistenciaFitxer, determinaSiEsOcult, obtenirDataUltimaModificacio, verificarEsPotModificar, llistarArxiusDirectori 
+ * 
+ *   La funcionalitat que s'espera que realitzin és:
+ * 
+ * - Comprovar si `filePath` existeix.
  * - Determinar si és ocult.
  * - Obtenir la data de la darrera modificació.
  * - Verificar si es pot modificar.
@@ -59,54 +61,49 @@ public class Exercici0 {
 
     // Mètode per comprovar l'existència del fitxer
     public Boolean comprovaExistenciaFitxer() {
-        // *************** CODI EXERCICI FITA **********************/
-        File fitxer = new File(this.filePath);
+        File fitxer = new File(filePath);
         return fitxer.exists();
     }
 
     // Mètode per determinar si el fitxer és ocult
     public Boolean determinaSiEsOcult() {
-        // *************** CODI EXERCICI FITA **********************/
-        File fitxer = new File(this.filePath);
+        File fitxer = new File(filePath);
         return fitxer.isHidden();
     }
 
     // Mètode per obtenir la data de l'última modificació
     public Date obtenirDataUltimaModificacio() {
-        // *************** CODI EXERCICI FITA **********************/
-        File fitxer = new File(this.filePath);
+        File fitxer = new File(filePath);
+        // lastModified() retorna els mil·lisegons des de l'1/1/1970
         return new Date(fitxer.lastModified());
     }
 
     // Mètode per verificar si el fitxer es pot modificar
     public Boolean verificarEsPotModificar() {
-        // *************** CODI EXERCICI FITA **********************/
-        File fitxer = new File(this.filePath);
+        File fitxer = new File(filePath);
         return fitxer.canWrite();
     }
 
     // Mètode per llistar els fitxers del directori base
     public ArrayList<String> llistarArxiusDirectori() {
-        // *************** CODI EXERCICI FITA **********************/
-        File fitxer = new File(this.filePath);
-        File directoriBase = fitxer.getParentFile();
-
-        if (directoriBase != null && directoriBase.exists() && directoriBase.isDirectory()) {
-            ArrayList<String> llistaNomsFitxers = new ArrayList<>();
-            File[] llistaFitxers = directoriBase.listFiles();
-            if (llistaFitxers != null) {
-                for (File f : llistaFitxers) {
-                    llistaNomsFitxers.add(f.getName());
-                }
-            }
-            return llistaNomsFitxers;
-        } else {
+        // El directori base és el pare del fitxer configurat
+        File directori = new File(filePath).getParentFile();
+        if (directori == null || !directori.exists() || !directori.isDirectory()) {
             return null;
         }
+
+        ArrayList<String> noms = new ArrayList<>();
+        File[] arxius = directori.listFiles();
+        if (arxius != null) {
+            for (File arxiu : arxius) {
+                noms.add(arxiu.getName());
+            }
+        }
+        return noms;
     }
 
     /****************************************************************************/
-    /* NO CAL MODIFICAR                                */
+    /*                          NO CAL MODIFICAR                                */
     /****************************************************************************/
     // Mètode per configurar la ruta del fitxer
     public void configuraRutaFitxer(String filePath) {
